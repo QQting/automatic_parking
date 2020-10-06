@@ -18,7 +18,7 @@ struct point_set{
 
 struct point_set point_temp;
 struct point_set point_set;
-std::vector<int> dock_vector;
+std::vector<int> dock_vector(4);
 boost::array<double, 2> temp_point_1 , temp_point_2;
 bool check_angle = false;
 
