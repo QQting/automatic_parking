@@ -6,127 +6,130 @@
 #include <nav_msgs/Path.h>
 #include <cmath>
 #include <chrono>
-
-#define _USE_MATH_DEFINES
-
-// ROS
-ros::Publisher vel_pub;
-
-//parameter setting
-std::string base_frame_id;
-double min_v, min_w, max_v, max_w;
-double dist_to_dock, dist_to_center;
-double threshold_v, threshold_w;
-
-bool reach_target_pos = false;
-bool reach_target_ang = false;
-bool target_alignment = false;
-bool left = false;
-bool left_check = false;
-bool pattern = false;
-int step = 0;
-
-
-static double clamp(double v, double v_min, double v_max)
-{
-    return std::min(std::max(v_min,v),v_max);
-}
+#include <boost/array.hpp>
+#include "controller.h"
 
 void lrCallback(const std_msgs::Bool::ConstPtr& msg){
     left = msg -> data;
 }
 
 // Setting linear and angular velocity
-void setVel(float x, float y, float yaw){
+void setVel(float x, float y, float yaw, auto robot_point){
     static geometry_msgs::Twist vel_msg;
-
+    double ideal_theta_1 = 0;
+    double ideal_theta_2 = -1.57; //angle 
+    double angle_threshold = 0.01; //maximum error of angle
+   
     if (step == 0){
         vel_msg.linear.x = 0;
-        ROS_INFO("docking......");
-        if (left){ 
-            if (((M_PI_2-0.03)<=yaw) && (yaw<=(M_PI_2+0.03))){
-                vel_msg.angular.z = 0;
-                vel_pub.publish(vel_msg);
-                step = 1;
-                left_check = true;
-            }
-            else if (((M_PI_2-threshold_w)<=yaw) && (yaw<(M_PI_2-0.03))) {
-                vel_msg.angular.z = -min_w;
-            }
-            else if (((-M_PI_2)<=yaw) && (yaw<(M_PI_2-threshold_w))){
-                vel_msg.angular.z = -max_w;
-            }
-            else if (((M_PI_2+0.03)<=yaw) && (yaw<(M_PI_2+threshold_w))){
-                vel_msg.angular.z = min_w;
-            }
-            else {
-                vel_msg.angular.z = max_w;
-            }
+        ROS_INFO("docking......, step_1_spin_%d",step1_count);
+        if (((-(ideal_theta_1)-angle_threshold)<=yaw) && (yaw<=(-(ideal_theta_1)+angle_threshold))){
+            vel_msg.angular.z = 0;
+            vel_pub.publish(vel_msg);
+            step = 1;
+
+            if (step1_count==0){
+                x_origin = x;
+                robot_point_temp = robot_point ;
+            }  
+        }
+        else if (((-(ideal_theta_1)+angle_threshold)<=yaw) && (yaw<(-(ideal_theta_1)+threshold_w))){
+            vel_msg.angular.z = min_w;
+        }
+        else if (((-(ideal_theta_1)+threshold_w)<=yaw) && (yaw< 3.14)){
+            vel_msg.angular.z = max_w;
+        }
+        else if (((-(ideal_theta_1)-threshold_w)<=yaw) && (yaw<(-(ideal_theta_1)-angle_threshold))){
+            vel_msg.angular.z = -min_w;
         }
         else {
-            if (((-M_PI_2-0.03)<=yaw) && (yaw<=(-M_PI_2+0.03))){
-                vel_msg.angular.z = 0;
-                vel_pub.publish(vel_msg);
-                step = 1;
-                left_check = false;
-            }
-            else if (((-M_PI_2+0.03)<=yaw) && (yaw<(-M_PI_2+threshold_w))){
-                vel_msg.angular.z = min_w;
-            }
-            else if (((-M_PI_2+threshold_w)<=yaw) && (yaw<(M_PI_2))){
-                vel_msg.angular.z = max_w;
-            }
-            else if (((-M_PI_2-threshold_w)<=yaw) && (yaw<(-M_PI_2-0.03))){
-                vel_msg.angular.z = -min_w;
-            }
-            else {
-                vel_msg.angular.z = -max_w;
-            }
+            vel_msg.angular.z = -max_w;
         }
     }
+    
     else if (step == 1){
-        ROS_INFO("docking......");
-        if (fabs(x) <= dist_to_center){
+        ROS_INFO("docking......, step_1_move_%d",step1_count);
+        
+        //printf("%f\n",dist(robot_point_temp,robot_point));
+        if ((fabs(x) <= dist_to_center) or (dist(robot_point_temp,robot_point) >= fabs(x_origin/split_num))){
             vel_msg.linear.x = 0;
             vel_pub.publish(vel_msg);
-            step = 2;
+            step1_count += 1;
+            if (fabs(x) <= dist_to_center){
+                step = 2;
+            }
+            else{
+                robot_point_temp = robot_point;
+                step = 0;
+            }
+            
+            
         }
-        else if ((dist_to_center<(-x)) && ((-x)<(dist_to_center+threshold_v))){
-            vel_msg.linear.x = -min_v;
+
+        else if (x<0){
+            printf("right\n");
+            if ((dist_to_center<fabs(x)) && (fabs(x)<(dist_to_center+threshold_v))){
+                vel_msg.linear.x = -min_v;
+            }
+
+            else {
+                vel_msg.linear.x = -max_v;
+            }
         }
-        else if ((dist_to_center<x) && (x<(dist_to_center+threshold_v))){
-            vel_msg.linear.x = min_v;
-        }
-        else {
-            vel_msg.linear.x = -max_v;
-        }
+        else if (x>0){
+            printf("left\n");
+            if ((dist_to_center<fabs(x)) && (fabs(x)<(dist_to_center+threshold_v))){
+                vel_msg.linear.x = min_v;
+                }
+            else {
+                vel_msg.linear.x = max_v;
+                }
+        }    
+           
     }
     else if (step == 2){
-        ROS_INFO("docking......");
-        if (fabs(yaw)<=0.03){
+        ROS_INFO("docking......, step_2_spin_%d",step2_count);
+         if (((-(ideal_theta_2)-angle_threshold)<=yaw) && (yaw<=(-(ideal_theta_2)+angle_threshold))){
             vel_msg.angular.z = 0;
             vel_pub.publish(vel_msg);
             step = 3;
+            if (step2_count==0){
+                x_origin = x;
+                robot_point_temp = robot_point ;
+            } 
         }
-        else if ((0.03<=yaw)&&(yaw<threshold_w)){
+        else if (((-(ideal_theta_2)+angle_threshold)<=yaw) && (yaw<(-(ideal_theta_2)+threshold_w))){
             vel_msg.angular.z = min_w;
         }
-        else if((-threshold_w<=yaw)&&(yaw<-0.03)){
-            vel_msg.angular.z = -min_w;
-        }
-        else if (threshold_w<=yaw){
+        else if (((-(ideal_theta_2)+threshold_w)<=yaw) && (yaw<(3.14))){
             vel_msg.angular.z = max_w;
+        }
+        else if (((-(ideal_theta_2)-threshold_w)<=yaw) && (yaw<(-(ideal_theta_2)-angle_threshold))){
+            vel_msg.angular.z = -min_w;
         }
         else {
             vel_msg.angular.z = -max_w;
         }
     }
     else if (step == 3){
-        ROS_INFO("docking......");
-        if (fabs(x)<dist_to_dock){
+        ROS_INFO("docking......, step_2_move_%d",step2_count);
+        
+        if ((fabs(x)<dist_to_dock) or (dist(robot_point_temp,robot_point) >= fabs(x_origin/split_num)) or ((fabs(y) > 0.1) and (fabs(x) <= 0.6) )){
             vel_msg.linear.x = 0;
             vel_pub.publish(vel_msg);
-            step = 4;
+            step2_count += 1;
+            if (fabs(x)<dist_to_dock){
+                step = 4;
+            }
+            else if ((fabs(y) > dist_to_center) and (fabs(x) <= 0.6)){
+                step = 0;
+                robot_point_temp = robot_point;
+            }
+            else{
+                robot_point_temp = robot_point;
+                step = 2;
+            }
+            
         }
         else if (fabs(x)<=(dist_to_dock+threshold_v)){
             vel_msg.linear.x = -min_v;
@@ -155,7 +158,7 @@ int main(int argc, char** argv){
     n_.param<double>("min_w",min_w, 0.1);
     n_.param<double>("max_v",max_v, 0.3);
     n_.param<double>("max_w",max_w, 0.3);
-    n_.param<double>("dist_to_dock",dist_to_dock, 0.3);
+    n_.param<double>("dist_to_dock",dist_to_dock, 0.30);
     n_.param<double>("dist_to_center",dist_to_center, 0.03);
     n_.param<double>("threshold_v",threshold_v, 0.3);
     n_.param<double>("threshold_w",threshold_w, 0.4);
@@ -167,6 +170,7 @@ int main(int argc, char** argv){
     ros::Rate rate(20.0);
     while(ros::ok()){
         tf::StampedTransform tf_dock;
+        tf::StampedTransform tf_odom;
         try{
             listener_dock.waitForTransform("base_link","dock_frame",ros::Time(0),ros::Duration(3.0));
             listener_dock.lookupTransform("base_link","dock_frame",ros::Time(0),tf_dock);
@@ -178,12 +182,18 @@ int main(int argc, char** argv){
             continue;
         }
 
+        listener_dock.waitForTransform("odom","base_link",ros::Time(0),ros::Duration(3.0));
+        listener_dock.lookupTransform("odom","base_link",ros::Time(0),tf_odom);
         // Dock_frame's origin and yaw
         float dock_x = tf_dock.getOrigin().x();
         float dock_y = tf_dock.getOrigin().y();
         float dock_yaw = tf::getYaw(tf_dock.getRotation());
+
+        odom[0] = tf_odom.getOrigin().x();
+        odom[1] = tf_odom.getOrigin().y();
+
         ros::spinOnce();
-        setVel(dock_x, dock_y, dock_yaw);
+        setVel(dock_x, dock_y, dock_yaw, odom);
         rate.sleep();
     }
     return 0;
