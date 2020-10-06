@@ -67,7 +67,7 @@ void setVel(float x, float y, float yaw, auto robot_point){
         }
 
         else if (x<0){
-            printf("right\n");
+            
             if ((dist_to_center<fabs(x)) && (fabs(x)<(dist_to_center+threshold_v))){
                 vel_msg.linear.x = -min_v;
             }
@@ -77,7 +77,7 @@ void setVel(float x, float y, float yaw, auto robot_point){
             }
         }
         else if (x>0){
-            printf("left\n");
+            
             if ((dist_to_center<fabs(x)) && (fabs(x)<(dist_to_center+threshold_v))){
                 vel_msg.linear.x = min_v;
                 }
@@ -114,7 +114,7 @@ void setVel(float x, float y, float yaw, auto robot_point){
     else if (step == 3){
         ROS_INFO("docking......, step_2_move_%d",step2_count);
         
-        if ((fabs(x)<dist_to_dock) or (dist(robot_point_temp,robot_point) >= fabs(x_origin/split_num)) or ((fabs(y) > 0.1) and (fabs(x) <= 0.6) )){
+        if ((fabs(x)<dist_to_dock) or (dist(robot_point_temp,robot_point) >= fabs(x_origin/split_num)) or ((fabs(y) > tune_distense) and (fabs(x) <= tune_threshold) )){
             vel_msg.linear.x = 0;
             vel_pub.publish(vel_msg);
             step2_count += 1;
@@ -181,17 +181,14 @@ int main(int argc, char** argv){
             ros::Duration(1.0).sleep();
             continue;
         }
-
         listener_dock.waitForTransform("odom","base_link",ros::Time(0),ros::Duration(3.0));
         listener_dock.lookupTransform("odom","base_link",ros::Time(0),tf_odom);
         // Dock_frame's origin and yaw
         float dock_x = tf_dock.getOrigin().x();
         float dock_y = tf_dock.getOrigin().y();
         float dock_yaw = tf::getYaw(tf_dock.getRotation());
-
         odom[0] = tf_odom.getOrigin().x();
         odom[1] = tf_odom.getOrigin().y();
-
         ros::spinOnce();
         setVel(dock_x, dock_y, dock_yaw, odom);
         rate.sleep();

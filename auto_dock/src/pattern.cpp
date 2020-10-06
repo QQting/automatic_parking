@@ -155,7 +155,7 @@ int main(int argc, char** argv){
     nh_.param<double>("pattern_angle1",pattern_angle1, 3.9);
     nh_.param<double>("pattern_angle2",pattern_angle2, 1.57);
     nh_.param<double>("pattern_angle3",pattern_angle3, 3.9);
-    nh_.param<double>("detect_angle_tolerance",detect_angle_tolerance, 0.25);
+    nh_.param<double>("detect_angle_tolerance",detect_angle_tolerance, 0.23);
     nh_.param<double>("group_dist_tolerance",group_dist_tolerance, 0.20);
     nh_.param<std::string>("laser_frame_id",laser_frame_id, "laser_frame");
     #if 0
