@@ -76,7 +76,6 @@ bool check_center(auto &dock_vector , auto &vectors){
 
 void temp_vector(int i , int j , int angle_count, auto &vectors ){
     
-    dock_vector.push_back(j);
     if (angle_count == 1){
         point_temp.vector_a = mid_point(vectors[i]);
         point_temp.vector_b = mid_point(vectors[j]);
