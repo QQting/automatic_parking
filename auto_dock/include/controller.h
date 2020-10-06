@@ -18,3 +18,5 @@ bool pattern = false;
 int step = 0;
 int split_num = 2;
 boost::array<float, 2> odom , robot_point_temp;
+float tune_distense = 0.05;
+float tune_threshold = 0.6;
