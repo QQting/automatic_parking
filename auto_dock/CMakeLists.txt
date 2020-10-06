@@ -17,8 +17,10 @@ catkin_package(
 #  DEPENDS system_lib
 )
 
+
 include_directories(
   include ${catkin_INCLUDE_DIRS}
+  include include/
 )
 
 add_executable(pattern src/pattern.cpp)
