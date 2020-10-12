@@ -9,10 +9,6 @@
 #include <boost/array.hpp>
 #include "controller.h"
 
-void lrCallback(const std_msgs::Bool::ConstPtr& msg){
-    left = msg -> data;
-}
-
 // Setting linear and angular velocity
 void setVel(float x, float y, float yaw, auto robot_point){
     static geometry_msgs::Twist vel_msg;
@@ -163,8 +159,6 @@ int main(int argc, char** argv){
     n_.param<double>("threshold_v",threshold_v, 0.3);
     n_.param<double>("threshold_w",threshold_w, 0.4);
     
-
-    ros::Subscriber lr_sub_ = n_.subscribe("l_or_r", 10, lrCallback);
     vel_pub = n_.advertise<geometry_msgs::Twist>("cmd_vel", 20);
     tf::TransformListener listener_dock;
     ros::Rate rate(20.0);

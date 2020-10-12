@@ -169,13 +169,11 @@ int main(int argc, char** argv){
 
     ros::Subscriber line_sub_ = nh_.subscribe("line_segments", 10, patternCallback);
     ros::Publisher marker_pub_ =nh_.advertise<visualization_msgs::Marker>("origin_markers",1);
-    ros::Publisher lr_pub_ =nh_.advertise<std_msgs::Bool>("l_or_r",100);
 
     ros::Rate rate(20.0);
 
     while(ros::ok()){
         marker_pub_.publish(points_msg);
-        lr_pub_.publish(lr_msg);
 
         ros::spinOnce();
         rate.sleep();
