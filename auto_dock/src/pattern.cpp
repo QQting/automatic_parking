@@ -27,26 +27,6 @@ bool calAngle(double a, double b, double angle_ab, double detect_angle_tolerance
     else return false;
 }
 
-void populateMarkerMsg(double x, double y){
-    points_msg.id = 1;
-    points_msg.ns = "points";
-    points_msg.type = visualization_msgs::Marker::POINTS;
-    points_msg.action = visualization_msgs::Marker::ADD;
-    points_msg.scale.x = 0.03;
-    points_msg.scale.y = 0.03;
-    points_msg.color.r = 1.0;
-    points_msg.color.g = 0.0;
-    points_msg.color.b = 1.0;
-    points_msg.color.a = 1.0;
-    geometry_msgs::Point p;
-    p.x = x;
-    p.y = y;
-    p.z = 0;
-    points_msg.points.push_back(p);
-    points_msg.header.frame_id = laser_frame_id;
-    points_msg.header.stamp = ros::Time::now();
-}
-
 void populateTF(double x, double y, double theta, std::string name){
     // publish dock_frame
     static tf::TransformBroadcaster br;
@@ -138,8 +118,6 @@ void patternCallback(const laser_line_extraction::LineSegmentList::ConstPtr& msg
         double theta = atan2((theta_point_1[1]-theta_point_2[1]),(theta_point_1[0]-theta_point_2[0]));
         printf("x:%f , y:%f , theta:%f\n",goal_point[0],goal_point[1],theta);
 
-        // populate dock origin marker publish to rviz
-        populateMarkerMsg(goal_point[0],goal_point[1]);
         // populate dock_frame
         populateTF(goal_point[0],goal_point[1],theta,"dock_frame");
     }
@@ -168,12 +146,10 @@ int main(int argc, char** argv){
     #endif
 
     ros::Subscriber line_sub_ = nh_.subscribe("line_segments", 10, patternCallback);
-    ros::Publisher marker_pub_ =nh_.advertise<visualization_msgs::Marker>("origin_markers",1);
 
     ros::Rate rate(20.0);
 
     while(ros::ok()){
-        marker_pub_.publish(points_msg);
 
         ros::spinOnce();
         rate.sleep();
