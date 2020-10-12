@@ -66,7 +66,7 @@ void updateVectors(){
 bool check_center(auto &dock_vector , auto &vectors){
     for(int i=0; i<4; i++){
         for(int j(i+1); j<=4 ; j++){
-            if (calAngle(vectors[i].angle,vectors[j].angle, 3.14-pattern_angle2, detect_angle_tolerance)){
+            if (calAngle(vectors[dock_vector[i]].angle,vectors[dock_vector[j]].angle, 3.14-pattern_angle2, detect_angle_tolerance)){
                 return true;
             }
         }
