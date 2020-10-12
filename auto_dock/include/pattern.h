@@ -2,7 +2,6 @@
 
 // ROS
 visualization_msgs::Marker points_msg;
-std_msgs::Bool lr_msg;
 
 // Parameters
 double pattern_angle1, pattern_angle2, pattern_angle3;
