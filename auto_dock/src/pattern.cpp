@@ -44,8 +44,8 @@ void updateVectors(){
 }
 
 bool check_center(auto &dock_vector , auto &vectors){
-    for(int i=0; i<4; i++){
-        for(int j(i+1); j<=4 ; j++){
+    for(int i=0; i<3; i++){
+        for(int j(i+1); j<=3 ; j++){
             if (calAngle(vectors[dock_vector[i]].angle,vectors[dock_vector[j]].angle, 3.14-pattern_angle2, detect_angle_tolerance)){
                 return true;
             }
@@ -100,7 +100,7 @@ void patternCallback(const laser_line_extraction::LineSegmentList::ConstPtr& msg
                 if (mid_dist(vectors[i] , vectors[j]) <= group_dist_tolerance) {
                     if (calAngle(vectors[i].angle,vectors[j].angle, pattern_angle1-3.14, detect_angle_tolerance)){
                         angle_count+=1;
-                        temp_vector(i , j ,angle_count , vectors );
+                        temp_vector(i , j ,angle_count , &vectors );
 
                         //printf("angle_count = %d\n",angle_count);
                     }
@@ -132,7 +132,7 @@ int main(int argc, char** argv){
     nh_.param<double>("pattern_angle1",pattern_angle1, 3.9);
     nh_.param<double>("pattern_angle2",pattern_angle2, 1.57);
     nh_.param<double>("pattern_angle3",pattern_angle3, 3.9);
-    nh_.param<double>("detect_angle_tolerance",detect_angle_tolerance, 0.23);
+    nh_.param<double>("detect_angle_tolerance",detect_angle_tolerance, 0.25);
     nh_.param<double>("group_dist_tolerance",group_dist_tolerance, 0.20);
     nh_.param<std::string>("laser_frame_id",laser_frame_id, "laser_frame");
     #if 0
