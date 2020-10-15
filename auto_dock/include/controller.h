@@ -8,8 +8,6 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include <visualization_msgs/msg/marker.hpp>
 #include <auto_dock.h>
-#include "far_docking_msgs/msg/line_segment_list.hpp"
-#include "far_docking_msgs/msg/line_segment.hpp"
 #include "laser_line_extraction/line_extraction.h"
 #include <string>
 #include <rclcpp/rclcpp.hpp>

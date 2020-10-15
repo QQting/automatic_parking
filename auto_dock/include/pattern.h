@@ -9,8 +9,8 @@
 #include <tf2/LinearMath/Quaternion.h>
 #include <visualization_msgs/msg/marker.hpp>
 #include <auto_dock.h>
-#include "far_docking_msgs/msg/line_segment_list.hpp"
-#include "far_docking_msgs/msg/line_segment.hpp"
+#include "laser_line_msgs/msg/line_segment_list.hpp"
+#include "laser_line_msgs/msg/line_segment.hpp"
 #include "laser_line_extraction/line_extraction.h"
 #include <vector>
 
@@ -34,7 +34,7 @@ namespace automatic_parking {
                 this->declare_parameter<std::string>("base_frame_id","base_link");
                 this->get_parameter("base_frame_id" , base_frame_id);
 
-                line_sub_ = this->create_subscription<far_docking_msgs::msg::LineSegmentList>("line_segments",rclcpp::QoS(rclcpp::KeepLast(10)).best_effort().durability_volatile(),
+                line_sub_ = this->create_subscription<laser_line_msgs::msg::LineSegmentList>("line_segments",rclcpp::QoS(rclcpp::KeepLast(10)).best_effort().durability_volatile(),
                     std::bind(&autodock_pattern::patternCallback, this, std::placeholders::_1));
                 tf_broadcaster_ = std::make_unique<tf2_ros::TransformBroadcaster>(this);
             }
@@ -49,14 +49,14 @@ namespace automatic_parking {
             } ;
 
             
-            void patternCallback(const far_docking_msgs::msg::LineSegmentList::SharedPtr msg );
-            void temp_vector(int& , int& ,int& , std::vector<far_docking_msgs::msg::LineSegment_<std::allocator<void>>>&);
-            bool check_center( std::vector<int> & ,std::vector<far_docking_msgs::msg::LineSegment_<std::allocator<void>>>&);
+            void patternCallback(const laser_line_msgs::msg::LineSegmentList::SharedPtr msg );
+            void temp_vector(int& , int& ,int& , std::vector<laser_line_msgs::msg::LineSegment_<std::allocator<void>>>&);
+            bool check_center( std::vector<int> & ,std::vector<laser_line_msgs::msg::LineSegment_<std::allocator<void>>>&);
             void updateVectors();
             void populateTF(double x, double y, double theta );
             bool calAngle(double a, double b, double angle_ab);
 
-            rclcpp::Subscription<far_docking_msgs::msg::LineSegmentList>::SharedPtr line_sub_;
+            rclcpp::Subscription<laser_line_msgs::msg::LineSegmentList>::SharedPtr line_sub_;
             std::unique_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
             std::vector<int> dock_vector = {0 ,0 ,0 ,0};
             Point_set point_set,point_temp;
