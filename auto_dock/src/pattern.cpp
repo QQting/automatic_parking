@@ -18,7 +18,7 @@ bool autodock_pattern::calAngle(double a, double b, double angle_ab){
     else if (angle> M_PI and angle < (M_PI_2 + M_PI)){
         angle = angle - M_PI ;
     }
-    //RCLCPP_INFO(get_logger(),"angle:%f , ab:%f \n",angle,angle_ab);
+    RCLCPP_INFO(get_logger(),"angle:%f , ab:%f \n",angle,angle_ab);
     if (fabs(angle_ab-angle)<=detect_angle_tolerance){
         return true;}
     else return false;
@@ -77,7 +77,7 @@ void autodock_pattern::temp_vector(int &i , int &j ,int &angle_count, std::vecto
         point_temp.vector_c = mid_point(vectors[j]);
         temp_point_1 = mid_two_point(point_temp.vector_a , point_temp.vector_b);
         temp_point_2 = mid_two_point(point_temp.vector_c , point_temp.vector_d);
-        //RCLCPP_INFO(get_logger(),"dist = %f\n",dist(temp_point_1,temp_point_2));
+
         if (dist(temp_point_1,temp_point_2) <= 0.3 and check_center(dock_vector , vectors)){
             //printf("%s\n", check_center(dock_vector , vectors ) ? "true" : "false");
             updateVectors();
@@ -123,9 +123,7 @@ void autodock_pattern::patternCallback(const laser_line_msgs::msg::LineSegmentLi
         boost::array<double, 2> theta_point_2 = mid_two_point(point_set.vector_c , point_set.vector_d);
         boost::array<double, 2> goal_point = mid_two_point(theta_point_1 , theta_point_2);
         
-        //RCLCPP_INFO(get_logger(),"x:%f , y:%f ",(theta_point_1[0]-theta_point_2[0]),(theta_point_1[1]-theta_point_2[1]));
-        double x_modify = theta_point_1[0]-theta_point_2[0] ;
-        double theta = atan2((theta_point_1[1]-theta_point_2[1]),x_modify);
+        double theta = atan2((theta_point_1[1]-theta_point_2[1]),(theta_point_1[0]-theta_point_2[0]));
         RCLCPP_INFO(get_logger(),"x:%f , y:%f , theta:%f",goal_point[0],goal_point[1],theta);
 
         // populate dock_frame
@@ -135,7 +133,6 @@ void autodock_pattern::patternCallback(const laser_line_msgs::msg::LineSegmentLi
 
 int main(int argc, char** argv){
 
-    //std::shared_ptr<automatic_parking::autodock_pattern> autodock_pattern_node;
     rclcpp::init(argc, argv);
     auto autodock_pattern_node = std::make_shared<automatic_parking::autodock_pattern>();
     rclcpp::WallRate rate(20.0);
