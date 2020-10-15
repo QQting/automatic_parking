@@ -1,38 +1,68 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(auto_dock)
 
-find_package(catkin REQUIRED COMPONENTS
-  roscpp
-  std_msgs
-  laser_line_extraction
-  visualization_msgs
-  geometry_msgs
-  tf
-)
+# Default to C99
+if(NOT CMAKE_C_STANDARD)
+  set(CMAKE_C_STANDARD 99)
+endif()
 
-catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES pattern
-#  CATKIN_DEPENDS roscpp geometry_msgs visualization_msgs
-#  DEPENDS system_lib
-)
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+
+# find dependencies
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+find_package(tf2  REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(laser_line_extraction REQUIRED)
+find_package(far_docking_msgs REQUIRED)
 
 
 include_directories(
-  include ${catkin_INCLUDE_DIRS}
   include include/
 )
+
 
 add_executable(pattern src/pattern.cpp)
 add_executable(controller src/controller.cpp)
 
-add_dependencies(pattern ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(controller ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-target_link_libraries(pattern
-  ${catkin_LIBRARIES}
+set(DEPENDENCIES
+  "rclcpp"           
+  "std_msgs"         
+  "geometry_msgs" 
+  "tf2_geometry_msgs"
+  "tf2"
+  "tf2_ros"
+  "nav_msgs"
+  "sensor_msgs"
+  "far_docking_msgs"
+  "laser_line_extraction"
 )
 
-target_link_libraries(controller
-  ${catkin_LIBRARIES}
-)
+ament_target_dependencies(pattern ${DEPENDENCIES})
+ament_target_dependencies(controller ${DEPENDENCIES})
+
+
+install (TARGETS  pattern
+  DESTINATION lib/${PROJECT_NAME})
+
+install (TARGETS  controller
+  DESTINATION lib/${PROJECT_NAME})
+
+install(
+  DIRECTORY launch 
+  DESTINATION share/${PROJECT_NAME})
+  
+ament_package()
