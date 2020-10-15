@@ -18,7 +18,7 @@ bool autodock_pattern::calAngle(double a, double b, double angle_ab){
     else if (angle> M_PI and angle < (M_PI_2 + M_PI)){
         angle = angle - M_PI ;
     }
-    RCLCPP_INFO(get_logger(),"angle:%f , ab:%f \n",angle,angle_ab);
+    //RCLCPP_INFO(get_logger(),"angle:%f , ab:%f \n",angle,angle_ab);
     if (fabs(angle_ab-angle)<=detect_angle_tolerance){
         return true;}
     else return false;
@@ -49,7 +49,7 @@ void autodock_pattern::updateVectors(){
     RCLCPP_INFO(get_logger(),"Upate vectors!");
 }
 
-bool autodock_pattern::check_center(std::vector<int> &dock_vector , std::vector<laser_line_msgs::msg::LineSegment_<std::allocator<void>>> &vectors){
+bool autodock_pattern::check_center(std::vector<laser_line_msgs::msg::LineSegment_<std::allocator<void>>> &vectors){
     for(int i=0; i<3; i++){
         for(int j(i+1); j<=3 ; j++){
             
