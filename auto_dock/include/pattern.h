@@ -7,7 +7,6 @@
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <chrono>
 #include <tf2/LinearMath/Quaternion.h>
-#include <visualization_msgs/msg/marker.hpp>
 #include <auto_dock.h>
 #include "laser_line_msgs/msg/line_segment_list.hpp"
 #include "laser_line_msgs/msg/line_segment.hpp"
@@ -51,7 +50,7 @@ namespace automatic_parking {
             
             void patternCallback(const laser_line_msgs::msg::LineSegmentList::SharedPtr msg );
             void temp_vector(int& , int& ,int& , std::vector<laser_line_msgs::msg::LineSegment_<std::allocator<void>>>&);
-            bool check_center( std::vector<int> & ,std::vector<laser_line_msgs::msg::LineSegment_<std::allocator<void>>>&);
+            bool check_center(std::vector<laser_line_msgs::msg::LineSegment_<std::allocator<void>>>&);
             void updateVectors();
             void populateTF(double x, double y, double theta );
             bool calAngle(double a, double b, double angle_ab);
