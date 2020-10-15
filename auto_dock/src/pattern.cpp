@@ -49,7 +49,7 @@ void autodock_pattern::updateVectors(){
     RCLCPP_INFO(get_logger(),"Upate vectors!");
 }
 
-bool autodock_pattern::check_center(std::vector<int> &dock_vector , std::vector<far_docking_msgs::msg::LineSegment_<std::allocator<void>>> &vectors){
+bool autodock_pattern::check_center(std::vector<int> &dock_vector , std::vector<laser_line_msgs::msg::LineSegment_<std::allocator<void>>> &vectors){
     for(int i=0; i<3; i++){
         for(int j(i+1); j<=3 ; j++){
             
@@ -61,7 +61,7 @@ bool autodock_pattern::check_center(std::vector<int> &dock_vector , std::vector<
     return false;
 }
 
-void autodock_pattern::temp_vector(int &i , int &j ,int &angle_count, std::vector<far_docking_msgs::msg::LineSegment_<std::allocator<void>>> &vectors ){
+void autodock_pattern::temp_vector(int &i , int &j ,int &angle_count, std::vector<laser_line_msgs::msg::LineSegment_<std::allocator<void>>> &vectors ){
     
     if (angle_count == 1){
         point_temp.vector_a = mid_point(vectors[i]);
@@ -86,8 +86,8 @@ void autodock_pattern::temp_vector(int &i , int &j ,int &angle_count, std::vecto
     }  
 }
 
-void autodock_pattern::patternCallback(const far_docking_msgs::msg::LineSegmentList::SharedPtr msg){
-    std::vector<far_docking_msgs::msg::LineSegment_<std::allocator<void>>> vectors = msg->line_segments;
+void autodock_pattern::patternCallback(const laser_line_msgs::msg::LineSegmentList::SharedPtr msg){
+    std::vector<laser_line_msgs::msg::LineSegment_<std::allocator<void>>> vectors = msg->line_segments;
    
     // Number of the line
     int lineNum = vectors.size();
