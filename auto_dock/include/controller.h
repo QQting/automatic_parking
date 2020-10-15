@@ -59,7 +59,7 @@ namespace automatic_parking {
             int step = 0;
             int step1_count = 0 , step2_count = 0;
             int split_num = 2;
-            float tune_distense = 0.07;
+            float tune_distense = 0.05;
             float tune_threshold = 0.5;
             float  x_origin;
             boost::array<float, 2> odom , robot_point_temp;

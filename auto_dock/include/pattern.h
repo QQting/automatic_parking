@@ -19,11 +19,11 @@ namespace automatic_parking {
     class autodock_pattern : public rclcpp::Node{
         public: 
             autodock_pattern(): Node("autodock_pattern"){
-                this->declare_parameter<double>("pattern_angle1",3.9);
+                this->declare_parameter<double>("pattern_angle1",3.84);
                 this->get_parameter("pattern_angle1", pattern_angle1);
                 this->declare_parameter<double>("pattern_angle2",1.57);
                 this->get_parameter("pattern_angle2" ,pattern_angle2);
-                this->declare_parameter<double>("pattern_angle3",3.9);
+                this->declare_parameter<double>("pattern_angle3",3.84);
                 this->get_parameter("pattern_angle3" , pattern_angle3);
                 this->declare_parameter<double>("detect_angle_tolerance",0.23);
                 this->get_parameter("detect_angle_tolerance" ,detect_angle_tolerance);
