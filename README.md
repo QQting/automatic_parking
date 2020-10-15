@@ -49,11 +49,11 @@ ros2 launch auto_dock auto_foxy.launch.py
 ### Pattern Parameters Definition
 <img src="https://github.com/CuteJui/automatic_parking/blob/master/readme_resource/pattern_parameters.png" width="435" height="270"/>
 
-- `pattern_angle1` (default: 3.81)
+- `pattern_angle1` (default: 3.84)
 	- Theta 1 as shown in pattern angle definition. Note that the unit is radian.
 - `pattern_angle2` (default: 1.57)
 	- Theta 2 as shown in pattern angle definition. Note that the unit is radian.
-- `pattern_angle3` (default: 3.81)
+- `pattern_angle3` (default: 3.84)
 	- Theta 3 as shown in pattern angle definition. Note that the unit is radian.
 - `detect_angle_tolerance` (default: 0.2)
 	- The maximum difference between detected angle and pattern angle(pattern\_angle1, pattern\_angle2, pattern\_angle3)
