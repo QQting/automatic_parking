@@ -19,7 +19,7 @@
   <depend>geometry_msgs</depend>
   <depend>tf2_geometry_msgs</depend>
   <depend>laser_line_extraction</depend>
-  <depend>far_docking_msgs</depend>
+  <depend>laser_line_msgs</depend>
 
 
   <export>

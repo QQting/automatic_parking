@@ -26,7 +26,7 @@ find_package(tf2  REQUIRED)
 find_package(tf2_ros REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(laser_line_extraction REQUIRED)
-find_package(far_docking_msgs REQUIRED)
+find_package(laser_line_msgs REQUIRED)
 
 
 include_directories(
@@ -47,7 +47,7 @@ set(DEPENDENCIES
   "tf2_ros"
   "nav_msgs"
   "sensor_msgs"
-  "far_docking_msgs"
+  "laser_line_msgs"
   "laser_line_extraction"
 )
 
