@@ -100,7 +100,7 @@ void patternCallback(const laser_line_extraction::LineSegmentList::ConstPtr& msg
                 if (mid_dist(vectors[i] , vectors[j]) <= group_dist_tolerance) {
                     if (calAngle(vectors[i].angle,vectors[j].angle, pattern_angle1-3.14, detect_angle_tolerance)){
                         angle_count+=1;
-                        temp_vector(i , j ,angle_count , &vectors );
+                        temp_vector(i , j ,angle_count , vectors);
 
                         //printf("angle_count = %d\n",angle_count);
                     }
