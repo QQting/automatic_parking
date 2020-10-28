@@ -1,18 +1,18 @@
 # Auto Docking
 This package can be divied into two parts, pattern recognition and moving to goal. In pattern recogintion, this package depends on laser_line extraction package to turn laser point clouds into line segments. Then, this package will go through these line segments to find the designed pattern and broadcast a frame, dock frame. After the frame being populated, the robot will move to the dock and the strategy is shown as the gif below.
 
-<img src="https://github.com/QQting/automatic_parking/blob/melodic-devel/readme_resource/docking_demo.gif"/>
+<img src="https://github.com/Adlink-ROS/automatic_parking/blob/melodic-devel/readme_resource/docking_demo.gif"/>
 
 ## Dependency
 - [ADLINK NeuronBot2](https://github.com/Adlink-ROS/neuronbot2)
-- [Laser Line Extraction](https://github.com/kam3k/laser_line_extraction)
+- [Laser Line Extraction](https://github.com/Adlink-ROS/laser_line_extraction)
 
 ## Usage
 Download the packages and dependencies into NeuronBot2 workspace.
 ```bash
 cd ~/neuronbot2_ros1_ws/src
-git clone https://github.com/kam3k/laser_line_extraction
-git clone https://github.com/QQting/automatic_parking.git -b melodic-devel
+git clone https://github.com/Adlink-ROS/laser_line_extraction.git
+git clone https://github.com/Adlink-ROS/auto_docking.git-b melodic-devel
 ```
 
 Build the NeuronBot2 workspace.
@@ -42,10 +42,10 @@ roslaunch autodock_controller docking.launch open_rviz:=true
 
 ## Parameters
 ### Pattern Angle Definition
-<img src="https://github.com/QQting/automatic_parking/blob/melodic-devel/readme_resource/pattern_angle.png" width="467" height="290"/>
+<img src="https://github.com/Adlink-ROS/automatic_parking/blob/melodic-devel/readme_resource/pattern_angle.png" width="467" height="290"/>
 
 ### Pattern Parameters Definition
-<img src="https://github.com/QQting/automatic_parking/blob/melodic-devel/readme_resource/pattern_parameters.png" width="435" height="270"/>
+<img src="https://github.com/Adlink-ROS/automatic_parking/blob/melodic-devel/readme_resource/pattern_parameters.png" width="435" height="270"/>
 
 - `pattern_angle1` (default: 4.21)
 	- Theta 1 as shown in pattern angle definition. Note that the unit is radian.
@@ -82,8 +82,8 @@ roslaunch autodock_controller docking.launch open_rviz:=true
 There are models of dock for Gazebo simulation in "Model" file.
 ### Dock 1
 The size of dock 1 is shown as the picture below.                                                                       
-<img src="https://github.com/QQting/automatic_parking/blob/melodic-devel/readme_resource/dock_1.png" width="418" height="219"/>
+<img src="https://github.com/Adlink-ROS/automatic_parking/blob/melodic-devel/readme_resource/dock_1.png" width="418" height="219"/>
 
 ### Dock 2
 The size of dock 2 is shown as the picture below.                                                                      
-<img src="https://github.com/QQting/automatic_parking/blob/melodic-devel/readme_resource/dock_2.png" width="460" height="238"/>
+<img src="https://github.com/Adlink-ROS/automatic_parking/blob/melodic-devel/readme_resource/dock_2.png" width="460" height="238"/>
