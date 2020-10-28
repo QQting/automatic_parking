@@ -40,7 +40,7 @@ void populateTF(double x, double y, double theta, std::string name){
 
 void updateVectors(){
     point_set = point_temp;
-    printf("Upate vectors!\n");
+    // printf("Upate vectors!\n");
 }
 
 bool check_center(auto &dock_vector , auto &vectors){
@@ -91,7 +91,7 @@ void patternCallback(const laser_line_extraction::LineSegmentList::ConstPtr& msg
 
     // Check whether topic line_segments is publishing
     if (lineNum < 4){
-        ROS_ERROR("There isn't enough line in the laser field!");
+        ROS_WARN("There isn't enough line in the laser field!");
         check_vec_size = false;
     }
     if (check_vec_size){
@@ -116,7 +116,7 @@ void patternCallback(const laser_line_extraction::LineSegmentList::ConstPtr& msg
         boost::array<double, 2> goal_point = mid_two_point(theta_point_1 , theta_point_2);
 
         double theta = atan2((theta_point_1[1]-theta_point_2[1]),(theta_point_1[0]-theta_point_2[0]));
-        printf("x:%f , y:%f , theta:%f\n",goal_point[0],goal_point[1],theta);
+        // printf("x:%f , y:%f , theta:%f\n",goal_point[0],goal_point[1],theta);
 
         // populate dock_frame
         populateTF(goal_point[0],goal_point[1],theta,"dock_frame");

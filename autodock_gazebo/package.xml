@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>autodock_gazebo</name>
+  <version>1.0.0</version>
+  <description>The autodock_gazebo package</description>
+  <maintainer email="ting.chang@adlinktech.com">Ting Chang</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+</package>

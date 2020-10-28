@@ -139,6 +139,7 @@ void setVel(float x, float y, float yaw, auto robot_point){
         vel_msg.angular.z = 0;
         vel_pub.publish(vel_msg);
         ROS_INFO("Finish Docking!");
+        step = 5;
     }
     vel_pub.publish(vel_msg);
 }
@@ -163,15 +164,20 @@ int main(int argc, char** argv){
     tf::TransformListener listener_dock;
     ros::Rate rate(20.0);
     while(ros::ok()){
+
+        if (step == 5) {
+            break;
+        }
+
         tf::StampedTransform tf_dock;
         tf::StampedTransform tf_odom;
-        try{
+        try {
             listener_dock.waitForTransform("base_link","dock_frame",ros::Time(0),ros::Duration(3.0));
             listener_dock.lookupTransform("base_link","dock_frame",ros::Time(0),tf_dock);
         }
-        catch (tf::TransformException &ex){
-            ROS_ERROR("%s",ex.what());
-            ROS_ERROR("Did not find the pattern!");
+        catch (tf::TransformException &ex) {
+            // ROS_WARN("%s",ex.what());
+            ROS_WARN("Can't recognize the docking station, please move the robot to be closer.");
             ros::Duration(1.0).sleep();
             continue;
         }
