@@ -12,7 +12,7 @@ Download the packages and dependencies into NeuronBot2 workspace.
 ```bash
 cd ~/neuronbot2_ros1_ws/src
 git clone https://github.com/Adlink-ROS/laser_line_extraction.git
-git clone https://github.com/Adlink-ROS/auto_docking.git-b melodic-devel
+git clone https://github.com/Adlink-ROS/auto_docking.git -b melodic-devel
 ```
 
 Build the NeuronBot2 workspace.
